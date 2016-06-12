@@ -19,3 +19,7 @@ if (!file.exists(fileDest)){
   # Now let's unzip the file contents
   unzip(fileDest, exdir = "./data" )
 }
+
+# Now let's load our data into two data frames
+NEI <- readRDS("./data/summarySCC_PM25.rds")
+SCC <- readRDS("./data/Source_Classification_Code.rds")
