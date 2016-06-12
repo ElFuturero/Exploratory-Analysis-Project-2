@@ -18,25 +18,39 @@ if(!exists("NEI")){
 library(dplyr)
 library(ggplot2)
 
-# First let's subset the rows relevant to Baltimore, MD (fips == "24510") 
+# We will use the dplyr library in order to create a nice ordered dataframe
+# that is summarized by year and type
 
 baltEms <- subset(NEI, fips == "24510") %>%
   tbl_df %>%
   select(Emissions, year, type) %>%
-  
-  
+  group_by(year, type) %>%
+  summarize(total = sum(Emissions, na.rm= TRUE))
 
-# baltPoint <- subset(NEI, fips == "24510" & type == "POINT")
-# baltNP <- subset(NEI, fips == "24510" & type == "NONPOINT")
-# baltRoad <- subset(NEI, fips == "24510" & type == "ON-ROAD")
-# baltNR <- subset(NEI, fips == "24510" & type == "NON-ROAD")
+# Now in order to graph, we will initialize our device
 
-# Now we will calculate the total emissions and reassign them to each of the variables.
-# According to the EPA, units are in 10^5 tons.
+# Now let's graph. First let's set the device that we want
 
-# baltPoint <- with(baltPoint, tapply(Emissions, year, sum, na.rm = TRUE))
-# baltNP <- with(baltNP, tapply(Emissions, year, sum, na.rm = TRUE))
-# baltRoad <- with(baltRoad, tapply(Emissions, year, sum, na.rm = TRUE))
-# baltNR <- with(baltNR, tapply(Emissions, year, sum, na.rm = TRUE))
+png("plot3.png", width = 480, height = 480)
 
-# Now we make a 
+# Now we will use the qplot function from ggplot2 in order to make our graph
+
+qplot(
+  year,
+  total,
+  data = baltEms,
+  geom = c("point", "line"),
+  colour = type,   # this is just to make it a little prettier
+  facets = .~type,   # this creates a little panel for each type
+  main = "Total PM2.5 Emissions by Source in Baltimore, MD\n(1999-2008)",
+  xlab = "Year",
+  ylab = "Total PM2.5 Emissions (10^5 tons)"
+  ) + theme(legend.position="none")   # turns off the legend
+
+# Now finally let's turn off the device
+
+dev.off()
+
+# Based on the graph all sources except POINT have had a net decrease from 1999-2008.
+# POINT sources have increased, with a sharp spike on 2005, coming down to almost 1999
+# levels by 2008
