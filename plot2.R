@@ -12,3 +12,11 @@
 if(!exists("NEI")){
   source("Project2Setup.R")
 }
+
+# First let's subset the rows relevant to Baltimore, MD (fips == "24510")
+
+baltSet <- subset(NEI, fips == "24510")
+
+# Now let's use tapply to get the totals by year
+
+baltTotals <- with(baltSet, tapply(Emissions, year, sum, na.rm = TRUE))
