@@ -13,6 +13,11 @@ if(!exists("NEI")){
   source("Project2Setup.R")
 }
 
+# Let's use the dplyr and ggplot2 libraries
+
+library(dplyr)
+library(ggplot2)
+
 # Preliminary examination of the SCC dataframe shows that motor vehicles
 # are categorized as either "highway" or "off-highway" under the "SCC.Level.Two"
 # column. We'll use the grepl function to find those codes relevant to us.
@@ -25,4 +30,11 @@ motorCodes <- as.character(motorCodes)
 
 # Now let's subset based on these codes
 
-motorEms <- subset(NEI, SCC %in% motorCodes)
+motorEms <- tbl_df(NEI) %>%   # this makes it into an easily readable form
+  filter(SCC %in% motorCodes) %>%   # this selects only the rows for the motorCodes
+  select(fips, Emissions, year) %>%   # this selects only the relevant columns
+  filter(fips=="24510" | fips =="06037" ) %>%   # this selects only for the cities we need   
+  mutate(city = ifelse(fips=="24510","Baltimore","Los Angeles")) %>% 
+  group_by(year, city) %>%
+  summarize(total = sum(Emissions, na.rm= TRUE))
+
