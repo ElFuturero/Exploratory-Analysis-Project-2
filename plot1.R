@@ -34,7 +34,7 @@ plot(
   xaxp = c(1999, 2008, 9),   # our tick marks on the x-axis
   col = "red",    # the color of the plotted points
   pch = 19,        # the full color symbol
-  main = "Total Emissions of PM2.5 in the US 1999-2008",
+  main = "Total Emissions of PM2.5 in the US\n(1999-2008)",
   xlab = "Year",
   ylab = "Total PM2.5 Emissions (10^8 tons)"
 )
