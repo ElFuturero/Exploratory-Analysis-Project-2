@@ -65,4 +65,4 @@ lines(
 dev.off()
 
 # As we can see emissions from motor vehicle sources have decreased in every year plotted
-# from 1999 to 2008
+# from 1999 to 2008.
